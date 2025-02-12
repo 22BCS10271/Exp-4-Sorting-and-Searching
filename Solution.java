@@ -1,4 +1,4 @@
-//Exp-1
+//Exp-1 (Problem #56: Merge Intervals)
 import java.util.*;
 
 class Solution {
@@ -21,7 +21,7 @@ class Solution {
 
 
 
-//Exp-2
+//Exp-2 (Problem #347: Top K Frequent Elements)
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> frequencyMap = new HashMap<>();
@@ -52,31 +52,24 @@ class Solution {
 
 
 
-//Exp-3
+//Exp-3(Problem #322: Coin Change)
+import java.util.*;
+
 class Solution {
-    public int[] topKFrequent(int[] nums, int k) {
-        Map<Integer, Integer> frequencyMap = new HashMap<>();
-        for (int num : nums) {
-            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
-        }
-
-        List<Integer>[] buckets = new List[nums.length + 1];
-        for (int key : frequencyMap.keySet()) {
-            int freq = frequencyMap.get(key);
-            if (buckets[freq] == null) {
-                buckets[freq] = new ArrayList<>();
-            }
-            buckets[freq].add(key);
-        }
-
-        List<Integer> result = new ArrayList<>();
-        for (int i = buckets.length - 1; i >= 0 && result.size() < k; i--) {
-            if (buckets[i] != null) {
-                result.addAll(buckets[i]);
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1); // Fill with a large value (infinity)
+        dp[0] = 0; // Base case: 0 coins needed for amount 0
+        
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (i >= coin) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
             }
         }
-
-        return result.stream().mapToInt(i -> i).toArray();
+        
+        return dp[amount] == amount + 1 ? -1 : dp[amount];
     }
 }
 
